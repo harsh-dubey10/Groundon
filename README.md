@@ -99,6 +99,9 @@ Groq enforces limits **per organization**, so keys from the same account share o
 two such keys: their rate-limit headers counted down together. Rotation then gives failover, not extra capacity.
 
 Open **http://localhost:8000** for the UI or **http://localhost:8000/docs** for Swagger.
+The start screen offers example questions for both modes:
+
+![Groundon start screen with example RAG and agent questions](docs/screenshot-home.png)
 Without an API key, `/search` and the evaluation's retrieval metrics still work.
 
 **Docker**
@@ -202,5 +205,5 @@ groundon/
   services.py  wiring · config.py · main.py (FastAPI) · static/index.html (UI)
 eval/          eval_set.json · run_eval.py · verifier_eval.py
 tests/         49 offline tests (fake embedder + scripted LLM)
-docs/          design-decisions.md · screenshot.png
+docs/          design-decisions.md · screenshots
 ```
