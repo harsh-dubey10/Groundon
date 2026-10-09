@@ -1,0 +1,9 @@
+.venv
+.env
+**/__pycache__
+.pytest_cache
+data/index
+data/company.db
+eval/results.json
+tests
+docs

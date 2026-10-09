@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Groundon</title>
+<style>
+  :root {
+    --bg: #f6f5f1; --panel: #ffffff; --ink: #1d1f1c; --muted: #6b6f68; --line: #e3e1da;
+    --accent: #7a4a1f; --accent-soft: #f3e9dd; --ok: #2f7a4b; --ok-soft: #e3f2e8;
+    --warn: #9a6b00; --warn-soft: #fbf1d6; --bad: #a33a2f; --bad-soft: #f8e4e1;
+    --chip: #efece5; --shadow: 0 1px 2px rgba(0,0,0,.05);
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141513; --panel: #1c1d1b; --ink: #ecebe6; --muted: #9b9e97; --line: #2e302c;
+      --accent: #e0a46a; --accent-soft: #3a2a1b; --ok: #6fcf97; --ok-soft: #1d3326;
+      --warn: #e8c15a; --warn-soft: #3a3016; --bad: #f08a7e; --bad-soft: #3d1f1b; --chip: #262824;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  .logo { font-weight: 750; font-size: 19px; letter-spacing: -.02em; }
+  .logo span { color: var(--accent); }
+  .tagline { color: var(--muted); font-size: 13px; }
+  #status { margin-left: auto; font-size: 12px; color: var(--muted); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); margin-right: 6px; vertical-align: middle; }
+  .dot.ok { background: var(--ok); } .dot.bad { background: var(--bad); }
+
+  .layout { display: grid; grid-template-columns: 290px 1fr; height: calc(100vh - 58px); }
+  aside { border-right: 1px solid var(--line); padding: 16px; overflow-y: auto; background: var(--panel); }
+  aside h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 18px 0 8px; }
+  aside h3:first-child { margin-top: 0; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg button { border: 0; background: transparent; color: var(--ink); padding: 8px; cursor: pointer; font: inherit; }
+  .seg button.active { background: var(--accent); color: var(--panel); font-weight: 600; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  label.opt { display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; }
+  label.opt small { color: var(--muted); }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  input[type=number] { width: 60px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+  .docs { list-style: none; padding: 0; margin: 0; }
+  .docs li { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 13px; padding: 5px 0; border-bottom: 1px dashed var(--line); }
+  .docs li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .docs button { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 15px; }
+  .docs button:hover { color: var(--bad); }
+  .upload { display: block; border: 1.5px dashed var(--line); border-radius: 8px; padding: 12px; text-align: center; color: var(--muted); font-size: 13px; cursor: pointer; margin-top: 8px; }
+  .upload:hover { border-color: var(--accent); color: var(--accent); }
+  .upload input { display: none; }
+
+  main { display: flex; flex-direction: column; min-width: 0; }
+  #thread { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
+  .empty { margin: auto; text-align: center; max-width: 560px; color: var(--muted); }
+  .empty h2 { color: var(--ink); font-size: 22px; margin-bottom: 4px; }
+  .examples { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+  .examples button { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 999px; padding: 6px 12px; cursor: pointer; font: inherit; font-size: 13px; }
+  .examples button:hover { border-color: var(--accent); }
+  .examples .tag { color: var(--accent); font-weight: 600; margin-right: 4px; }
+
+  .q { align-self: flex-end; background: var(--accent); color: var(--panel); padding: 10px 14px; border-radius: 14px 14px 4px 14px; max-width: 75%; }
+  .a { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; max-width: 860px; box-shadow: var(--shadow); }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--chip); color: var(--muted); }
+  .badge.ok { background: var(--ok-soft); color: var(--ok); }
+  .badge.warn { background: var(--warn-soft); color: var(--warn); }
+  .badge.bad { background: var(--bad-soft); color: var(--bad); }
+  .answer { white-space: pre-wrap; }
+  .cite { display: inline-block; font-size: 11px; font-weight: 700; background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 0 5px; margin: 0 1px; cursor: pointer; vertical-align: 1px; }
+  details { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+  .src { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin-top: 8px; font-size: 13px; transition: background .3s; }
+  .src.flash { background: var(--accent-soft); }
+  .src header { all: unset; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .src .lbl { font-weight: 700; color: var(--accent); }
+  .src .meta { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+  .src p { margin: 6px 0 0; color: var(--muted); }
+  .step { font-family: var(--mono); font-size: 12px; background: var(--bg); border-radius: 6px; padding: 8px; margin-top: 8px; white-space: pre-wrap; word-break: break-word; }
+  .step b { color: var(--accent); }
+  .step.err b { color: var(--bad); }
+  .loading { color: var(--muted); font-style: italic; }
+
+  form#ask { display: flex; gap: 10px; padding: 14px 24px 20px; border-top: 1px solid var(--line); background: var(--panel); }
+  #q { flex: 1; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; font: inherit; background: var(--bg); color: var(--ink); }
+  #q:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  form#ask button { padding: 0 20px; border: 0; border-radius: 10px; background: var(--accent); color: var(--panel); font: inherit; font-weight: 600; cursor: pointer; }
+  form#ask button:disabled { opacity: .5; cursor: wait; }
+
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; height: auto; }
+    aside { border-right: 0; border-bottom: 1px solid var(--line); }
+    #thread { padding: 16px; min-height: 60vh; }
+    form#ask { padding: 12px 16px; position: sticky; bottom: 0; }
+    .tagline { display: none; }
+    .q { max-width: 90%; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Ground<span>on</span></div>
+  <div class="tagline">Grounded answers from your documents, with receipts.</div>
+  <div id="status"><span class="dot"></span>connecting…</div>
+</header>
+<div class="layout">
+  <aside>
+    <h3>Mode</h3>
+    <div class="seg" id="mode">
+      <button data-mode="rag" class="active">RAG</button>
+      <button data-mode="agent">Agent</button>
+    </div>
+    <div class="hint" id="modeHint">Retrieve → grounded prompt → answer with citations.</div>
+
+    <h3>Options</h3>
+    <div id="ragOpts">
+      <label class="opt"><input type="checkbox" id="hybrid" checked> Hybrid search <small>BM25 + vectors</small></label>
+      <label class="opt"><input type="checkbox" id="rerank" checked> Rerank <small>cross-encoder</small></label>
+      <div class="row" style="padding:4px 0"><span>Top-k chunks</span><input type="number" id="topk" min="1" max="20" value="4"></div>
+    </div>
+    <label class="opt"><input type="checkbox" id="verify"> Verify groundedness <small>+1 LLM call</small></label>
+
+    <h3>Documents</h3>
+    <ul class="docs" id="docs"></ul>
+    <label class="upload">Upload PDF, DOCX, TXT or MD<input type="file" id="file" multiple accept=".pdf,.docx,.txt,.md"></label>
+    <div class="hint" id="uploadMsg"></div>
+  </aside>
+
+  <main>
+    <div id="thread">
+      <div class="empty" id="empty">
+        <h2>Ask Pallet Dynamics anything</h2>
+        <div>Answers cite their sources, and Groundon says so when the documents don't contain the answer.</div>
+        <div class="examples" id="examples"></div>
+      </div>
+    </div>
+    <form id="ask">
+      <input id="q" placeholder="e.g. How many leave days can I carry over?" autocomplete="off" required>
+      <button id="send">Ask</button>
+    </form>
+  </main>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let mode = "rag", counter = 0;
+
+const EXAMPLES = [
+  ["rag", "How many unused leave days can I carry over, and until when?"],
+  ["rag", "What is the per diem for Germany?"],
+  ["rag", "What dental insurance do we get?"],
+  ["rag", "Is annual leave unlimited?"],
+  ["agent", "How many annual leave days does Priya Sharma have left, and how many could she carry over?"],
+  ["agent", "What is the hotel limit per night in Germany, in INR?"],
+  ["agent", "Which open P1 tickets are there, and what is the resolution SLA for them?"],
+];
+
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll("#mode button").forEach((b) => b.classList.toggle("active", b.dataset.mode === m));
+  $("ragOpts").style.display = m === "rag" ? "" : "none";
+  $("modeHint").textContent = m === "rag"
+    ? "Retrieve → grounded prompt → answer with citations."
+    : "The LLM chooses tools: document search, SQL database, currency API.";
+}
+document.querySelectorAll("#mode button").forEach((b) => b.onclick = () => setMode(b.dataset.mode));
+
+$("examples").innerHTML = EXAMPLES.map(([m, q], i) =>
+  `<button data-i="${i}"><span class="tag">${m === "rag" ? "RAG" : "Agent"}</span>${esc(q)}</button>`).join("");
+$("examples").onclick = (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  const [m, q] = EXAMPLES[b.dataset.i]; setMode(m); $("q").value = q; ask();
+};
+
+async function api(path, opts = {}) {
+  const r = await fetch(path, opts);
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.detail ? (typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail)) : r.statusText);
+  return body;
+}
+
+async function refresh() {
+  try {
+    const h = await api("/health");
+    $("status").innerHTML = `<span class="dot ${h.llm_configured ? "ok" : "bad"}"></span>${h.documents} docs · ${h.chunks_indexed} chunks · ${h.llm_configured ? esc(h.llm_model) : "no LLM key: search only"}`;
+    const docs = await api("/documents");
+    $("docs").innerHTML = docs.map((d) =>
+      `<li><span title="${esc(d.source)}">${esc(d.source)} <small style="color:var(--muted)">(${d.n_chunks})</small></span><button title="Delete" data-id="${esc(d.doc_id)}">×</button></li>`).join("")
+      || `<li><span style="color:var(--muted)">No documents yet</span></li>`;
+  } catch (e) {
+    $("status").innerHTML = `<span class="dot bad"></span>API unreachable`;
+  }
+}
+$("docs").onclick = async (e) => {
+  const b = e.target.closest("button[data-id]"); if (!b) return;
+  if (!confirm("Remove this document from the index?")) return;
+  await api(`/documents/${b.dataset.id}`, { method: "DELETE" }); refresh();
+};
+$("file").onchange = async (e) => {
+  const fd = new FormData(); [...e.target.files].forEach((f) => fd.append("files", f));
+  $("uploadMsg").textContent = "Parsing, chunking, embedding…";
+  try {
+    const r = await api("/documents", { method: "POST", body: fd });
+    $("uploadMsg").textContent = r.results.map((x) => `${x.source}: ${x.status}${x.n_chunks ? ` (${x.n_chunks} chunks)` : ""}${x.error ? ` (${x.error})` : ""}`).join(" · ");
+  } catch (err) { $("uploadMsg").textContent = "Upload failed: " + err.message; }
+  e.target.value = ""; refresh();
+};
+
+function renderAnswer(text, id) {
+  return esc(text).replace(/\[(S\d+(?:\s*,\s*S\d+)*)\]/g, (_, group) =>
+    group.split(/\s*,\s*/).map((l) => `<span class="cite" data-target="${id}-${l}">${l}</span>`).join(""));
+}
+
+function badges(d) {
+  const out = [];
+  if (d.abstained) out.push(`<span class="badge warn">abstained${d.llm_called === false ? " (LLM not called)" : ""}</span>`);
+  if (d.citations) {
+    if (d.citations.invalid.length) out.push(`<span class="badge bad">invalid citations: ${esc(d.citations.invalid.join(", "))}</span>`);
+    else if (d.citations.has_citations) out.push(`<span class="badge ok">citations valid</span>`);
+    else if (!d.citations.is_abstention && mode === "rag") out.push(`<span class="badge warn">no citations</span>`);
+  }
+  if (d.verification) {
+    const v = d.verification;
+    if (v.grounded === true) out.push(`<span class="badge ok">verified grounded</span>`);
+    else if (v.grounded === false) out.push(`<span class="badge bad">unsupported claims</span>`);
+    else out.push(`<span class="badge">verification failed</span>`);
+  }
+  if (d.confidence != null) out.push(`<span class="badge">${esc(d.confidence_type)} score ${Number(d.confidence).toFixed(2)}</span>`);
+  if ((d.sources || []).some((s) => s.flags.length)) out.push(`<span class="badge bad">⚠ injection attempt detected in a source</span>`);
+  if (d.steps) out.push(`<span class="badge">${d.steps.length} tool call${d.steps.length === 1 ? "" : "s"}</span>`);
+  if (d.timings_ms?.total) out.push(`<span class="badge">${(d.timings_ms.total / 1000).toFixed(1)} s</span>`);
+  return out.join("");
+}
+
+function sourcesHtml(sources, id) {
+  if (!sources?.length) return "";
+  return `<details ${mode === "rag" ? "" : ""}><summary>${sources.length} retrieved source${sources.length === 1 ? "" : "s"}</summary>` +
+    sources.map((s) => `<div class="src" id="${id}-${s.label}"><header><span class="lbl">${s.label}</span><span>${esc(s.source)}${s.page ? `, p.${s.page}` : ""}</span>
+      <span class="meta">cos ${s.vector_score.toFixed(2)}${s.rerank_score != null ? ` · rerank ${s.rerank_score.toFixed(2)}` : ""}${s.vector_rank ? ` · vec#${s.vector_rank}` : ""}${s.bm25_rank ? ` · bm25#${s.bm25_rank}` : ""}</span>
+      ${s.flags.length ? `<span class="badge bad">${esc(s.flags.join(", "))}</span>` : ""}</header><p>${esc(s.text)}</p></div>`).join("") + `</details>`;
+}
+
+function stepsHtml(steps) {
+  if (!steps?.length) return "";
+  return `<details open><summary>Agent trace</summary>` + steps.map((s, i) =>
+    `<div class="step ${s.error ? "err" : ""}"><b>${i + 1}. ${esc(s.tool)}</b>(${esc(JSON.stringify(s.arguments))}) · ${s.duration_ms} ms\n${esc(s.result.length > 400 ? s.result.slice(0, 400) + "…" : s.result)}</div>`).join("") + `</details>`;
+}
+
+async function ask() {
+  const question = $("q").value.trim(); if (!question) return;
+  $("empty")?.remove();
+  const id = `a${++counter}`;
+  $("thread").insertAdjacentHTML("beforeend", `<div class="q">${esc(question)}</div><div class="a" id="${id}"><span class="loading">${mode === "rag" ? "Retrieving and answering…" : "Agent is working…"}</span></div>`);
+  const box = $(id); box.scrollIntoView({ behavior: "smooth" });
+  $("q").value = ""; $("send").disabled = true;
+  try {
+    const verify = $("verify").checked;
+    const d = mode === "rag"
+      ? await api("/ask", { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question, verify, hybrid: $("hybrid").checked, rerank: $("rerank").checked, top_k: +$("topk").value || 4 }) })
+      : await api("/agent", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, verify }) });
+    const unsupported = d.verification?.unsupported_claims?.length
+      ? `<div class="hint" style="color:var(--bad)">Unsupported: ${esc(d.verification.unsupported_claims.join("; "))}</div>` : "";
+    const why = d.abstain_reason ? `<div class="hint">Why: ${esc(d.abstain_reason)}</div>` : "";
+    box.innerHTML = `<div class="badges">${badges(d)}</div><div class="answer">${renderAnswer(d.answer, id)}</div>${why}${unsupported}${stepsHtml(d.steps)}${sourcesHtml(d.sources, id)}`;
+  } catch (e) {
+    box.innerHTML = `<div class="badges"><span class="badge bad">error</span></div>${esc(e.message)}`;
+  } finally {
+    $("send").disabled = false; $("q").focus();
+  }
+}
+$("ask").onsubmit = (e) => { e.preventDefault(); ask(); };
+
+$("thread").onclick = (e) => {
+  const c = e.target.closest(".cite"); if (!c) return;
+  const el = document.getElementById(c.dataset.target); if (!el) return;
+  el.closest("details").open = true; el.scrollIntoView({ behavior: "smooth", block: "center" });
+  el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1200);
+};
+
+refresh();
+</script>
+</body>
+</html>

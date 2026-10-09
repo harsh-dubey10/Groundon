@@ -1,0 +1,16 @@
+services:
+  groundon:
+    build: .
+    image: groundon:latest
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - HF_HUB_OFFLINE=1  # models are baked into the image
+    volumes:
+      - groundon-data:/app/data/index  # persist the FAISS index + chunk store across restarts
+    restart: unless-stopped
+
+volumes:
+  groundon-data:

@@ -1,0 +1,10 @@
+[project]
+name = "groundon"
+version = "1.0.0"
+description = "Hallucination-resistant agentic RAG over enterprise documents"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

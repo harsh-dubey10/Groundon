@@ -1,0 +1,1014 @@
+{
+  "verifier_model": "openai/gpt-oss-20b",
+  "summary": {
+    "original": {
+      "rate": 0.9696969696969697,
+      "n": 33,
+      "errors": 0
+    },
+    "number swap": {
+      "rate": 1.0,
+      "n": 30,
+      "errors": 0
+    },
+    "added claim": {
+      "rate": 1.0,
+      "n": 33,
+      "errors": 0
+    }
+  },
+  "cases": [
+    {
+      "question": "How many unused annual leave days can be carried over to next year?",
+      "kind": "original",
+      "answer": "A maximum of 8 unused annual leave days may be carried over to the next calendar year [S1][S2].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How many unused annual leave days can be carried over to next year?",
+      "kind": "added claim",
+      "answer": "A maximum of 8 unused annual leave days may be carried over to the next calendar year [S1][S2]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "How many unused annual leave days can be carried over to next year?",
+      "kind": "number swap",
+      "answer": "A maximum of 9 unused annual leave days may be carried over to the next calendar year [S1][S2].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "A maximum of 9 unused annual leave days may be carried over to the next calendar year"
+      ],
+      "error": null
+    },
+    {
+      "question": "By what date must carried-over leave be used?",
+      "kind": "original",
+      "answer": "Carried\u2011over leave must be used by 31\u202fMarch of the following year [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "By what date must carried-over leave be used?",
+      "kind": "added claim",
+      "answer": "Carried\u2011over leave must be used by 31\u202fMarch of the following year [S1]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "By what date must carried-over leave be used?",
+      "kind": "number swap",
+      "answer": "Carried\u2011over leave must be used by 32\u202fMarch of the following year [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Carried\u2011over leave must be used by 32\u202fMarch of the following year"
+      ],
+      "error": null
+    },
+    {
+      "question": "How many days of sick leave do employees get?",
+      "kind": "original",
+      "answer": "Employees receive 12 days of paid sick leave per year [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How many days of sick leave do employees get?",
+      "kind": "added claim",
+      "answer": "Employees receive 12 days of paid sick leave per year [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit"
+      ],
+      "error": null
+    },
+    {
+      "question": "How many days of sick leave do employees get?",
+      "kind": "number swap",
+      "answer": "Employees receive 13 days of paid sick leave per year [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees receive 13 days of paid sick leave per year"
+      ],
+      "error": null
+    },
+    {
+      "question": "How long is parental leave for a primary caregiver?",
+      "kind": "original",
+      "answer": "Primary caregivers receive 26 weeks of fully paid parental leave [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How long is parental leave for a primary caregiver?",
+      "kind": "added claim",
+      "answer": "Primary caregivers receive 26 weeks of fully paid parental leave [S1]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "How long is parental leave for a primary caregiver?",
+      "kind": "number swap",
+      "answer": "Primary caregivers receive 27 weeks of fully paid parental leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Primary caregivers receive 27 weeks of fully paid parental leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "When is a medical certificate needed for sick leave?",
+      "kind": "original",
+      "answer": "A medical certificate is required for sick leave of more than\u202f2\u202fconsecutive days [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "When is a medical certificate needed for sick leave?",
+      "kind": "added claim",
+      "answer": "A medical certificate is required for sick leave of more than\u202f2\u202fconsecutive days [S1]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "When is a medical certificate needed for sick leave?",
+      "kind": "number swap",
+      "answer": "A medical certificate is required for sick leave of more than\u202f3\u202fconsecutive days [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "A medical certificate is required for sick leave of more than\u202f3\u202fconsecutive days"
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the daily allowance when travelling in Germany?",
+      "kind": "original",
+      "answer": "EUR\u202f75 per day [S1]",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "What is the daily allowance when travelling in Germany?",
+      "kind": "added claim",
+      "answer": "EUR\u202f75 per day [S1] Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1]."
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the daily allowance when travelling in Germany?",
+      "kind": "number swap",
+      "answer": "EUR\u202f76 per day [S1]",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "EUR\u202f76 per day"
+      ],
+      "error": null
+    },
+    {
+      "question": "Which flights allow premium economy?",
+      "kind": "original",
+      "answer": "Premium economy is permitted for flights longer than\u202f8\u202fhours\u202f[S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "Which flights allow premium economy?",
+      "kind": "added claim",
+      "answer": "Premium economy is permitted for flights longer than\u202f8\u202fhours\u202f[S1]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "Which flights allow premium economy?",
+      "kind": "number swap",
+      "answer": "Premium economy is permitted for flights longer than\u202f9\u202fhours\u202f[S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Premium economy is permitted for flights longer than\u202f9\u202fhours"
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the hotel limit per night in the United States?",
+      "kind": "original",
+      "answer": "USD\u202f220 per night [S1]",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "What is the hotel limit per night in the United States?",
+      "kind": "added claim",
+      "answer": "USD\u202f220 per night [S1] Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the hotel limit per night in the United States?",
+      "kind": "number swap",
+      "answer": "USD\u202f221 per night [S1]",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "USD\u202f221 per night"
+      ],
+      "error": null
+    },
+    {
+      "question": "Within how many days must expense claims be submitted?",
+      "kind": "original",
+      "answer": "Expense claims must be submitted within 30 days of the trip end date [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "Within how many days must expense claims be submitted?",
+      "kind": "added claim",
+      "answer": "Expense claims must be submitted within 30 days of the trip end date [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit"
+      ],
+      "error": null
+    },
+    {
+      "question": "Within how many days must expense claims be submitted?",
+      "kind": "number swap",
+      "answer": "Expense claims must be submitted within 31 days of the trip end date [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Expense claims must be submitted within 31 days of the trip end date"
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the minimum password length?",
+      "kind": "original",
+      "answer": "Passwords must be at least 14 characters long [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "What is the minimum password length?",
+      "kind": "added claim",
+      "answer": "Passwords must be at least 14 characters long [S1]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the minimum password length?",
+      "kind": "number swap",
+      "answer": "Passwords must be at least 15 characters long [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Passwords must be at least 15 characters long"
+      ],
+      "error": null
+    },
+    {
+      "question": "Can I use a USB stick on my work laptop?",
+      "kind": "original",
+      "answer": "No. USB mass\u2011storage devices are blocked on company laptops [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "Can I use a USB stick on my work laptop?",
+      "kind": "added claim",
+      "answer": "No. USB mass\u2011storage devices are blocked on company laptops [S1]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "How quickly must a P1 security incident be contained?",
+      "kind": "original",
+      "answer": "P1 incidents must be contained within\u202f4\u202fhours [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How quickly must a P1 security incident be contained?",
+      "kind": "added claim",
+      "answer": "P1 incidents must be contained within\u202f4\u202fhours [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit"
+      ],
+      "error": null
+    },
+    {
+      "question": "How quickly must a P1 security incident be contained?",
+      "kind": "number swap",
+      "answer": "P2 incidents must be contained within\u202f5\u202fhours [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "P2 incidents must be contained within 5 hours"
+      ],
+      "error": null
+    },
+    {
+      "question": "Where do I report a phishing email?",
+      "kind": "original",
+      "answer": "Report the phishing email using the Report\u202fPhishing button or forward it to\u202fsecurity@palletdynamics.example\u202fwithin 1\u202fhour of noticing it. [S1]",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "Where do I report a phishing email?",
+      "kind": "added claim",
+      "answer": "Report the phishing email using the Report\u202fPhishing button or forward it to\u202fsecurity@palletdynamics.example\u202fwithin 1\u202fhour of noticing it. [S1] Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "Where do I report a phishing email?",
+      "kind": "number swap",
+      "answer": "Report the phishing email using the Report\u202fPhishing button or forward it to\u202fsecurity@palletdynamics.example\u202fwithin 2\u202fhour of noticing it. [S1]",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "within 2 hour of noticing it"
+      ],
+      "error": null
+    },
+    {
+      "question": "How many days a week are we expected in the office?",
+      "kind": "original",
+      "answer": "Employees are expected to work from the office 3 days per week [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How many days a week are we expected in the office?",
+      "kind": "added claim",
+      "answer": "Employees are expected to work from the office 3 days per week [S1]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "How many days a week are we expected in the office?",
+      "kind": "number swap",
+      "answer": "Employees are expected to work from the office 4 days per week [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees are expected to work from the office 4 days per week"
+      ],
+      "error": null
+    },
+    {
+      "question": "How much is the home office stipend in India?",
+      "kind": "original",
+      "answer": "The home office stipend in India is INR\u202f15,000 [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How much is the home office stipend in India?",
+      "kind": "added claim",
+      "answer": "The home office stipend in India is INR\u202f15,000 [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit"
+      ],
+      "error": null
+    },
+    {
+      "question": "How much is the home office stipend in India?",
+      "kind": "number swap",
+      "answer": "The home office stipend in India is INR\u202f15,001 [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "The home office stipend in India is INR\u202f15,001"
+      ],
+      "error": null
+    },
+    {
+      "question": "For how long can I work from another country?",
+      "kind": "original",
+      "answer": "Employees may work from another country for up to\u202f30\u202fdays per calendar year [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "For how long can I work from another country?",
+      "kind": "added claim",
+      "answer": "Employees may work from another country for up to\u202f30\u202fdays per calendar year [S1]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "For how long can I work from another country?",
+      "kind": "number swap",
+      "answer": "Employees may work from another country for up to\u202f31\u202fdays per calendar year [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees may work from another country for up to\u202f31\u202fdays per calendar year"
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the maximum value of a gift I can accept from a vendor?",
+      "kind": "original",
+      "answer": "Employees may accept gifts from business partners worth up to INR\u202f2,000 (or EUR\u202f25) [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "What is the maximum value of a gift I can accept from a vendor?",
+      "kind": "added claim",
+      "answer": "Employees may accept gifts from business partners worth up to INR\u202f2,000 (or EUR\u202f25) [S1]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave [S1]."
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the maximum value of a gift I can accept from a vendor?",
+      "kind": "number swap",
+      "answer": "Employees may accept gifts from business partners worth up to INR\u202f2,001 (or EUR\u202f26) [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees may accept gifts from business partners worth up to INR\u202f2,001 (or EUR\u202f26)"
+      ],
+      "error": null
+    },
+    {
+      "question": "How do I raise an ethics concern anonymously?",
+      "kind": "original",
+      "answer": "You can raise concerns anonymously by contacting the Ethics Hotline at ethics@palletdynamics.example [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How do I raise an ethics concern anonymously?",
+      "kind": "added claim",
+      "answer": "You can raise concerns anonymously by contacting the Ethics Hotline at ethics@palletdynamics.example [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit"
+      ],
+      "error": null
+    },
+    {
+      "question": "How long is the probation period?",
+      "kind": "original",
+      "answer": "The probation period is 6 months [S2].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How long is the probation period?",
+      "kind": "added claim",
+      "answer": "The probation period is 6 months [S2]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "How long is the probation period?",
+      "kind": "number swap",
+      "answer": "The probation period is 7 months [S2].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "The probation period is 7 months"
+      ],
+      "error": null
+    },
+    {
+      "question": "Which trainings must new joiners finish in their first month?",
+      "kind": "original",
+      "answer": "New joiners must complete Security Awareness training and POSH (Prevention of Sexual Harassment) training within the first 30 days of joining [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "Which trainings must new joiners finish in their first month?",
+      "kind": "added claim",
+      "answer": "New joiners must complete Security Awareness training and POSH (Prevention of Sexual Harassment) training within the first 30 days of joining [S1]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "Which trainings must new joiners finish in their first month?",
+      "kind": "number swap",
+      "answer": "New joiners must complete Security Awareness training and POSH (Prevention of Sexual Harassment) training within the first 31 days of joining [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "New joiners must complete Security Awareness training and POSH (Prevention of Sexual Harassment) training within the first 31 days of joining"
+      ],
+      "error": null
+    },
+    {
+      "question": "How many parking spaces for cars are there at the Bengaluru office?",
+      "kind": "original",
+      "answer": "120 car spaces are managed at the Bengaluru office [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How many parking spaces for cars are there at the Bengaluru office?",
+      "kind": "added claim",
+      "answer": "120 car spaces are managed at the Bengaluru office [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit"
+      ],
+      "error": null
+    },
+    {
+      "question": "How many parking spaces for cars are there at the Bengaluru office?",
+      "kind": "number swap",
+      "answer": "121 car spaces are managed at the Bengaluru office [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "121 car spaces are managed at the Bengaluru office"
+      ],
+      "error": null
+    },
+    {
+      "question": "What does HR-POL-009 say about core hours?",
+      "kind": "original",
+      "answer": "HR-POL\u2011009 states that core collaboration hours are\u202f11:00\u202fto\u202f16:00\u202fIST (10:00\u202fto\u202f15:00\u202fCET for Germany), and meetings should be scheduled within these core hours [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "What does HR-POL-009 say about core hours?",
+      "kind": "added claim",
+      "answer": "HR-POL\u2011009 states that core collaboration hours are\u202f11:00\u202fto\u202f16:00\u202fIST (10:00\u202fto\u202f15:00\u202fCET for Germany), and meetings should be scheduled within these core hours [S1]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO."
+      ],
+      "error": null
+    },
+    {
+      "question": "What does HR-POL-009 say about core hours?",
+      "kind": "number swap",
+      "answer": "HR-POL\u201110 states that core collaboration hours are\u202f12:1\u202fto\u202f17:1\u202fIST (11:1\u202fto\u202f16:1\u202fCET for Germany), and meetings should be scheduled within these core hours [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "HR-POL\u201110 states that core collaboration hours are\u202f12:1\u202fto\u202f17:1\u202fIST (11:1\u202fto\u202f16:1\u202fCET for Germany), and meetings should be scheduled within these core hours"
+      ],
+      "error": null
+    },
+    {
+      "question": "Under FIN-POL-011, is alcohol reimbursable?",
+      "kind": "original",
+      "answer": "Alcohol is not reimbursable under the travel and expense policy (FIN\u2011POL\u2011011) [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "Under FIN-POL-011, is alcohol reimbursable?",
+      "kind": "added claim",
+      "answer": "Alcohol is not reimbursable under the travel and expense policy (FIN\u2011POL\u2011011) [S1]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "Under FIN-POL-011, is alcohol reimbursable?",
+      "kind": "number swap",
+      "answer": "Alcohol is not reimbursable under the travel and expense policy (FIN\u2011POL\u201112) [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "FIN\u2011POL\u201112"
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the Singapore daily rate?",
+      "kind": "original",
+      "answer": "The Singapore daily rate is SGD\u202f110 per day [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "What is the Singapore daily rate?",
+      "kind": "added claim",
+      "answer": "The Singapore daily rate is SGD\u202f110 per day [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit"
+      ],
+      "error": null
+    },
+    {
+      "question": "What is the Singapore daily rate?",
+      "kind": "number swap",
+      "answer": "The Singapore daily rate is SGD\u202f111 per day [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "The Singapore daily rate is SGD\u202f111 per day"
+      ],
+      "error": null
+    },
+    {
+      "question": "I'm going on paternity leave, how long do I get?",
+      "kind": "original",
+      "answer": "Primary (or secondary) caregivers receive fully paid parental leave; secondary caregivers get 4 weeks of fully paid parental leave [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "I'm going on paternity leave, how long do I get?",
+      "kind": "added claim",
+      "answer": "Primary (or secondary) caregivers receive fully paid parental leave; secondary caregivers get 4 weeks of fully paid parental leave [S1]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "I'm going on paternity leave, how long do I get?",
+      "kind": "number swap",
+      "answer": "Primary (or secondary) caregivers receive fully paid parental leave; secondary caregivers get 5 weeks of fully paid parental leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "secondary caregivers get 5 weeks of fully paid parental leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "If I resign, do I get paid for leave I haven't taken?",
+      "kind": "original",
+      "answer": "Yes. Upon resignation, up to\u202f15\u202fdays of unused annual leave are encashed at the basic salary rate [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "If I resign, do I get paid for leave I haven't taken?",
+      "kind": "added claim",
+      "answer": "Yes. Upon resignation, up to\u202f15\u202fdays of unused annual leave are encashed at the basic salary rate [S1]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "If I resign, do I get paid for leave I haven't taken?",
+      "kind": "number swap",
+      "answer": "Yes. Upon resignation, up to\u202f16\u202fdays of unused annual leave are encashed at the basic salary rate [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "up to\u202f16\u202fdays of unused annual leave are encashed at the basic salary rate"
+      ],
+      "error": null
+    },
+    {
+      "question": "What happens if my laptop gets stolen?",
+      "kind": "original",
+      "answer": "If a laptop is lost or stolen, it must be reported to IT within\u202f24\u202fhours [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "What happens if my laptop gets stolen?",
+      "kind": "added claim",
+      "answer": "If a laptop is lost or stolen, it must be reported to IT within\u202f24\u202fhours [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit"
+      ],
+      "error": null
+    },
+    {
+      "question": "What happens if my laptop gets stolen?",
+      "kind": "number swap",
+      "answer": "If a laptop is lost or stolen, it must be reported to IT within\u202f25\u202fhours [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "If a laptop is lost or stolen, it must be reported to IT within\u202f25\u202fhours"
+      ],
+      "error": null
+    },
+    {
+      "question": "Who supports me during my first three months?",
+      "kind": "original",
+      "answer": "Your onboarding buddy\u2014an experienced colleague from your team\u2014supports you for the first\u202f90\u202fdays [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "Who supports me during my first three months?",
+      "kind": "added claim",
+      "answer": "Your onboarding buddy\u2014an experienced colleague from your team\u2014supports you for the first\u202f90\u202fdays [S1]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "Who supports me during my first three months?",
+      "kind": "number swap",
+      "answer": "Your onboarding buddy\u2014an experienced colleague from your team\u2014supports you for the first\u202f91\u202fdays [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "first 91 days"
+      ],
+      "error": null
+    },
+    {
+      "question": "What's the notice period after I'm confirmed?",
+      "kind": "original",
+      "answer": "After confirmation, the notice period is 60 days [S1] [S2].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "What's the notice period after I'm confirmed?",
+      "kind": "added claim",
+      "answer": "After confirmation, the notice period is 60 days [S1] [S2]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "What's the notice period after I'm confirmed?",
+      "kind": "number swap",
+      "answer": "After confirmation, the notice period is 61 days [S1] [S2].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "After confirmation, the notice period is 61 days"
+      ],
+      "error": null
+    },
+    {
+      "question": "How much do I get monthly for my internet at home?",
+      "kind": "original",
+      "answer": "You receive an internet allowance of INR\u202f1,500 per month [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "How much do I get monthly for my internet at home?",
+      "kind": "added claim",
+      "answer": "You receive an internet allowance of INR\u202f1,500 per month [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit"
+      ],
+      "error": null
+    },
+    {
+      "question": "How much do I get monthly for my internet at home?",
+      "kind": "number swap",
+      "answer": "You receive an internet allowance of INR\u202f1,501 per month [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "You receive an internet allowance of INR\u202f1,501 per month"
+      ],
+      "error": null
+    },
+    {
+      "question": "Can a supplier give me cash as a thank-you?",
+      "kind": "original",
+      "answer": "No. Cash or cash\u2011equivalent gifts must never be accepted from a supplier or any other party [S1][S2].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "Can a supplier give me cash as a thank-you?",
+      "kind": "added claim",
+      "answer": "No. Cash or cash\u2011equivalent gifts must never be accepted from a supplier or any other party [S1][S2]. Any exception to this rule must also be approved in writing by the CEO [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Any exception to this rule must also be approved in writing by the CEO"
+      ],
+      "error": null
+    },
+    {
+      "question": "Is annual leave unlimited at Pallet Dynamics?",
+      "kind": "original",
+      "answer": "No. Full\u2011time employees receive 24 days of paid annual leave per calendar year [S2].",
+      "expected_grounded": true,
+      "grounded": false,
+      "unsupported_claims": [
+        "No."
+      ],
+      "error": null
+    },
+    {
+      "question": "Is annual leave unlimited at Pallet Dynamics?",
+      "kind": "added claim",
+      "answer": "No. Full\u2011time employees receive 24 days of paid annual leave per calendar year [S2]. Employees who breach this rule lose two days of annual leave [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Employees who breach this rule lose two days of annual leave"
+      ],
+      "error": null
+    },
+    {
+      "question": "Is annual leave unlimited at Pallet Dynamics?",
+      "kind": "number swap",
+      "answer": "No. Full\u2011time employees receive 25 days of paid annual leave per calendar year [S2].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Full\u2011time employees receive 25 days of paid annual leave per calendar year"
+      ],
+      "error": null
+    },
+    {
+      "question": "Who is the cafeteria vendor and until when is the contract?",
+      "kind": "original",
+      "answer": "The cafeteria vendor is FreshBite Catering, and the contract was renewed until June\u202f2027 [S1].",
+      "expected_grounded": true,
+      "grounded": true,
+      "unsupported_claims": [],
+      "error": null
+    },
+    {
+      "question": "Who is the cafeteria vendor and until when is the contract?",
+      "kind": "added claim",
+      "answer": "The cafeteria vendor is FreshBite Catering, and the contract was renewed until June\u202f2027 [S1]. Compliance with this rule is reviewed by the board of directors in a quarterly audit [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "Compliance with this rule is reviewed by the board of directors in a quarterly audit."
+      ],
+      "error": null
+    },
+    {
+      "question": "Who is the cafeteria vendor and until when is the contract?",
+      "kind": "number swap",
+      "answer": "The cafeteria vendor is FreshBite Catering, and the contract was renewed until June\u202f2028 [S1].",
+      "expected_grounded": false,
+      "grounded": false,
+      "unsupported_claims": [
+        "contract was renewed until June\u202f2028"
+      ],
+      "error": null
+    }
+  ]
+}
