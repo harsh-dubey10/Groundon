@@ -67,6 +67,7 @@ class Agent:
 
         messages: list[dict] = [{"role": "system", "content": AGENT_SYSTEM}, {"role": "user", "content": question}]
         steps: list[ToolStep] = []
+        evidence: list[str] = []  # tool results exactly as the model saw them, for the verifier
         answer, stopped = "", "max_steps"
 
         for _ in range(self.max_steps):
@@ -88,8 +89,9 @@ class Agent:
                 output, is_error = self._execute(tools, call.name, call.arguments)
                 steps.append(ToolStep(call.name, call.arguments, output[:1500], is_error,
                                       round((time.perf_counter() - ts) * 1000)))
-                messages.append({"role": "tool", "tool_call_id": call.id, "name": call.name,
-                                 "content": output[:MAX_TOOL_RESULT_CHARS]})
+                seen = output[:MAX_TOOL_RESULT_CHARS]
+                evidence.append(f"[{call.name}({json.dumps(call.arguments)})]\n{seen}")
+                messages.append({"role": "tool", "tool_call_id": call.id, "name": call.name, "content": seen})
         else:
             # Out of steps: ask for a best-effort answer from what was gathered, without tools.
             messages.append({"role": "user", "content": "Stop calling tools. Answer now using only the tool results above."})
@@ -99,8 +101,8 @@ class Agent:
         citations = check_citations(answer, {s.label for s in doc_search.sources}) if doc_search.sources else None
         verification = None
         if verify:
-            evidence = "\n\n".join(f"[{s.tool}({json.dumps(s.arguments)})]\n{s.result}" for s in steps)
-            verification = verify_groundedness(self.llm, self.verifier_model, evidence or "(no tool results)", answer)
+            verification = verify_groundedness(self.llm, self.verifier_model,
+                                               "\n\n".join(evidence) or "(no tool results)", answer)
 
         return AgentAnswer(answer=answer, steps=steps, sources=doc_search.sources, citations=citations,
                            verification=verification, stopped_reason=stopped,

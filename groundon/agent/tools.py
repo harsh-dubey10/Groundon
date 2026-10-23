@@ -7,6 +7,7 @@ our code validates the args, runs the function, and feeds the result back.
 import json
 import re
 import sqlite3
+import time
 from contextlib import closing
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -48,6 +49,7 @@ _READ_ONLY_START = re.compile(r"^\s*(select|with)\b", re.IGNORECASE)
 @dataclass
 class SqlTool:
     db_path: Path
+    timeout_s: float = 5.0
 
     def schema(self) -> str:
         with closing(self._connect()) as db:
@@ -67,11 +69,18 @@ class SqlTool:
         # Layer 3: cheap syntactic checks for a clearer error message.
         if not _READ_ONLY_START.match(sql) or ";" in sql:
             raise ToolError("Only a single read-only SELECT statement is allowed.")
+        # Layer 4: a time limit, since read-only queries can still run for ages (huge cross joins).
+        deadline = time.monotonic() + self.timeout_s
         try:
             with closing(self._connect()) as db:
+                db.set_progress_handler(lambda: time.monotonic() > deadline, 10_000)
                 cursor = db.execute(sql)
                 columns = [d[0] for d in cursor.description]
                 rows = cursor.fetchmany(MAX_SQL_ROWS + 1)
+        except sqlite3.OperationalError as e:
+            if time.monotonic() > deadline:
+                raise ToolError(f"Query stopped: exceeded the {self.timeout_s:g} s time limit. Narrow it down.") from e
+            raise ToolError(f"SQL error: {e}") from e
         except sqlite3.Error as e:
             raise ToolError(f"SQL error: {e}") from e
         truncated = len(rows) > MAX_SQL_ROWS

@@ -83,3 +83,25 @@ def test_currency_tool_validates_codes(make_services):
     with pytest.raises(ToolError):
         tool(10, "euro", "INR")
     assert json.loads(tool(5, "INR", "inr"))["converted"] == 5
+
+
+def test_agent_verifier_sees_full_tool_results(make_services):
+    # The trace shown to users is truncated, but the verifier must judge against what the model saw.
+    # 2000 zeros then the marker, built in SQL so it appears only in the result, not the arguments.
+    llm = ScriptedLLM([
+        tool_call("query_database", sql="SELECT hex(zeroblob(1000)) || upper('tail_marker') AS v"),
+        ChatResult(content="The value is a long run of x characters per the HR database."),
+        ChatResult(content=json.dumps({"grounded": True, "unsupported_claims": []})),
+    ])
+    ans = make_services(llm).agent.run("What is the value?", verify=True)
+    assert "TAIL_MARKER" not in ans.steps[0].result  # trace stays short
+    verifier_prompt = llm.calls[-1]["messages"][1]["content"]
+    assert "TAIL_MARKER" in verifier_prompt
+
+
+def test_sql_runaway_query_is_stopped(make_services, settings):
+    make_services()
+    sql = SqlTool(settings.company_db_path, timeout_s=0.01)
+    joins = ", ".join(f"employees t{i}" for i in range(8))  # 10^8 rows
+    with pytest.raises(ToolError, match="time limit"):
+        sql(f"SELECT sum(t0.id + t7.id) FROM {joins}")

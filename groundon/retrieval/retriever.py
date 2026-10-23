@@ -34,9 +34,14 @@ class Retriever:
         if not candidate_ids:
             return RetrievalResult(chunks=[], confidence=float("-inf"), confidence_type="vector")
 
+        # Drop ids that no longer exist: BM25 can briefly hold chunks of a just-deleted document.
+        chunks_by_id = self.store.get_chunks(candidate_ids)
+        candidate_ids = [cid for cid in candidate_ids if cid in chunks_by_id]
+        if not candidate_ids:
+            return RetrievalResult(chunks=[], confidence=float("-inf"), confidence_type="vector")
+
         # Cosine for every candidate (BM25-only hits weren't scored by FAISS).
         cosine = (self.store.vectors_for(candidate_ids) @ query_vec).astype(float)
-        chunks_by_id = self.store.get_chunks(candidate_ids)
         candidates = [
             RetrievedChunk(
                 chunk=chunks_by_id[cid],
@@ -45,7 +50,6 @@ class Retriever:
                 bm25_rank=keyword_ids.index(cid) + 1 if cid in keyword_ids else None,
             )
             for cid, cos in zip(candidate_ids, cosine)
-            if cid in chunks_by_id
         ]
 
         use_rerank = rerank and self.reranker is not None

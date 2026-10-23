@@ -70,3 +70,23 @@ def test_pure_abstention_skips_verifier(make_services):
     ans = make_services(llm).rag.answer("per diem Germany", rerank=False, verify=True)
     assert ans.abstained and ans.verification.grounded is True
     assert len(llm.calls) == 1  # no verifier call
+
+
+def test_verifier_string_verdict_is_not_trusted(make_services):
+    # "false" as a string is truthy in Python; a malformed verdict must not count as grounded.
+    llm = ScriptedLLM([
+        ChatResult(content="Per diem in Germany is EUR 75 [S1]."),
+        ChatResult(content=json.dumps({"grounded": "false", "unsupported_claims": []})),
+    ])
+    ans = make_services(llm).rag.answer("per diem Germany", rerank=False, verify=True)
+    assert ans.verification.grounded is None and ans.verification.error
+
+
+def test_verifier_single_claim_string_is_kept_whole(make_services):
+    llm = ScriptedLLM([
+        ChatResult(content="Per diem in Germany is EUR 90 [S1]."),
+        ChatResult(content=json.dumps({"grounded": False, "unsupported_claims": "EUR 90"})),
+    ])
+    ans = make_services(llm).rag.answer("per diem Germany", rerank=False, verify=True)
+    assert ans.verification.grounded is False
+    assert ans.verification.unsupported_claims == ["EUR 90"]

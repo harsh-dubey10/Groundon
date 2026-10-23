@@ -72,6 +72,12 @@ def verify_groundedness(llm: LLMClient, model: str, documents: str, answer: str)
             json_mode=True,
         )
         data = json.loads(result.content)
-        return Verification(grounded=bool(data.get("grounded")), unsupported_claims=list(data.get("unsupported_claims") or []))
-    except (LLMError, json.JSONDecodeError, AttributeError) as e:
+        grounded = data.get("grounded")
+        if not isinstance(grounded, bool):  # e.g. the string "false", which bool() would call True
+            return Verification(grounded=None, error=f"verifier returned non-boolean verdict: {grounded!r}")
+        claims = data.get("unsupported_claims") or []
+        if isinstance(claims, str):
+            claims = [claims]
+        return Verification(grounded=grounded, unsupported_claims=[str(c) for c in claims])
+    except (LLMError, json.JSONDecodeError, AttributeError, TypeError) as e:
         return Verification(grounded=None, error=str(e))

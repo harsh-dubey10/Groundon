@@ -78,16 +78,21 @@ class VectorStore:
         with self._lock:
             start = (self._db.execute("SELECT COALESCE(MAX(id), -1) FROM chunks").fetchone()[0]) + 1
             ids = np.arange(start, start + len(chunks), dtype=np.int64)
-            self._db.execute(
-                "INSERT INTO documents VALUES (?, ?, ?, ?)",
-                (doc_id, source, len(chunks), datetime.now(timezone.utc).isoformat()),
-            )
-            self._db.executemany(
-                "INSERT INTO chunks VALUES (?, ?, ?, ?, ?, ?)",
-                [(int(i), doc_id, source, page, n, text) for n, (i, (page, text)) in enumerate(zip(ids, chunks))],
-            )
-            _faiss_single_threaded()
-            self._index.add_with_ids(vectors, ids)
+            try:
+                self._db.execute(
+                    "INSERT INTO documents VALUES (?, ?, ?, ?)",
+                    (doc_id, source, len(chunks), datetime.now(timezone.utc).isoformat()),
+                )
+                self._db.executemany(
+                    "INSERT INTO chunks VALUES (?, ?, ?, ?, ?, ?)",
+                    [(int(i), doc_id, source, page, n, text) for n, (i, (page, text)) in enumerate(zip(ids, chunks))],
+                )
+                _faiss_single_threaded()
+                self._index.add_with_ids(vectors, ids)
+            except BaseException:
+                # Otherwise the uncommitted rows ride along with the next commit, as chunks without vectors.
+                self._db.rollback()
+                raise
             self._db.commit()
             self._save()
             return len(chunks)

@@ -64,7 +64,7 @@ The reasoning behind each choice, plus a 5-minute walkthrough and the known limi
 
 ```
 question ─► LLM ──► search_documents(query)            → same hybrid+rerank retriever, citable [S#]
-             ▲  ├─► query_database(sql)                → read-only SQLite (3 layers of protection)
+             ▲  ├─► query_database(sql)                → read-only SQLite (4 layers of protection)
              │  └─► convert_currency(amount, from, to) → live rates (frankfurter.dev)
              └──── tool results ◄──┘     … until it answers (max 6 steps) → citation check / verifier
 ```
@@ -204,6 +204,6 @@ groundon/
   guard.py     prompt-injection defences
   services.py  wiring · config.py · main.py (FastAPI) · static/index.html (UI)
 eval/          eval_set.json · run_eval.py · verifier_eval.py
-tests/         49 offline tests (fake embedder + scripted LLM)
+tests/         55 offline tests (fake embedder + scripted LLM)
 docs/          design-decisions.md · screenshots
 ```
