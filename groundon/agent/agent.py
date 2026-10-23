@@ -13,6 +13,7 @@
 import json
 import time
 from dataclasses import dataclass, field
+from typing import Callable
 
 from groundon.agent.tools import CurrencyTool, DocumentSearchTool, SqlTool, ToolError, tool_schemas
 from groundon.generation.grounding import (CitationReport, Verification, check_citations, normalize_citations,
@@ -47,18 +48,20 @@ class AgentAnswer:
 
 class Agent:
     def __init__(self, llm: LLMClient, retriever: Retriever, sql_tool: SqlTool, currency_tool: CurrencyTool,
-                 *, max_steps: int = 6, verifier_model: str):
+                 *, max_steps: int = 6, verifier_model: str,
+                 is_confident: Callable[[float, str], bool] | None = None):
         self.llm = llm
         self.retriever = retriever
         self.sql_tool = sql_tool
         self.currency_tool = currency_tool
         self.max_steps = max_steps
         self.verifier_model = verifier_model
+        self.is_confident = is_confident
         self._schemas = tool_schemas(sql_tool.schema())
 
     def run(self, question: str, *, verify: bool = False) -> AgentAnswer:
         t0 = time.perf_counter()
-        doc_search = DocumentSearchTool(self.retriever)  # fresh per run: holds this run's sources
+        doc_search = DocumentSearchTool(self.retriever, is_confident=self.is_confident)  # fresh per run: holds this run's sources
         tools = {
             "search_documents": lambda a: doc_search(a["query"]),
             "query_database": lambda a: self.sql_tool(a["sql"]),

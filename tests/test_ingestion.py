@@ -78,3 +78,11 @@ def test_index_persists_across_restarts(make_services):
     second = make_services()  # reloads FAISS + SQLite from disk; auto-ingest skipped
     assert second.store.size == size
     assert second.retriever.retrieve("per diem Germany", top_k=1).chunks[0].chunk.source == "travel.md"
+
+
+def test_overlap_never_pushes_chunk_over_size():
+    # A short sentence carried as overlap plus a near-limit sentence used to exceed chunk_size.
+    text = "A" * 90 + ". " + "B" * 480 + ". " + " ".join(["C" * 30 + "."] * 3)
+    chunks = chunk_text(text, chunk_size=500, chunk_overlap=100)
+    assert all(len(c) <= 500 for c in chunks), [len(c) for c in chunks]
+    assert any("B" * 480 in c for c in chunks)

@@ -65,7 +65,7 @@ def test_gives_up_after_max_rounds():
                                    "k2": [_error(groq.RateLimitError, 429)] * 9}, max_rounds=2)
     with pytest.raises(LLMError, match="all 2 key"):
         llm.chat([{"role": "user", "content": "x"}])
-    assert len(calls) == 4 and len(sleeps) == 2
+    assert len(calls) == 4 and len(sleeps) == 1  # backs off between rounds, not after the last
 
 
 def test_non_retryable_error_is_not_rotated():

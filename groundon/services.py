@@ -58,7 +58,11 @@ def build_services(settings: Settings, *, embedder: Embedder | None = None, rera
     agent = None
     if llm is not None:
         agent = Agent(llm, retriever, SqlTool(settings.company_db_path), CurrencyTool(settings.currency_api_url),
-                      max_steps=settings.agent_max_steps, verifier_model=settings.verifier_model)
+                      max_steps=settings.agent_max_steps, verifier_model=settings.verifier_model,
+                      is_confident=rag.is_confident)
+
+    if not settings.admin_api_key:
+        log.warning("ADMIN_API_KEY not set: anyone who can reach the API can upload or delete documents.")
 
     if settings.auto_ingest_samples and store.size == 0 and settings.docs_dir.exists():
         results = ingestor.ingest_directory(settings.docs_dir)

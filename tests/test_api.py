@@ -59,3 +59,37 @@ def test_upload_and_delete(client):
 def test_validation(client):
     assert client().post("/ask", json={"question": ""}).status_code == 422
     assert client().post("/search", json={"query": "x", "top_k": 99}).status_code == 422
+
+
+def test_upload_reads_no_more_than_the_limit(client, monkeypatch):
+    from starlette.datastructures import UploadFile
+
+    import groundon.main
+
+    monkeypatch.setattr(groundon.main, "MAX_UPLOAD_BYTES", 10)
+    reads = []
+    original = UploadFile.read
+
+    async def spy(self, size=-1):
+        reads.append(size)
+        return await original(self, size)
+
+    monkeypatch.setattr(UploadFile, "read", spy)
+    files = [("files", ("big.txt", io.BytesIO(b"x" * 1000), "text/plain"))]
+    result = client().post("/documents", files=files).json()["results"][0]
+    assert result["status"] == "rejected"
+    assert reads == [11]  # never pulls the whole file into memory
+
+
+def test_document_writes_need_admin_key_when_configured(client, settings):
+    settings.admin_api_key = "s3cret"
+    c = client()
+    files = [("files", ("new.txt", io.BytesIO(b"The cafeteria opens at 8am."), "text/plain"))]
+    assert c.post("/documents", files=files).status_code == 401
+    assert c.post("/documents", files=files, headers={"X-API-Key": "wrong"}).status_code == 401
+    r = c.post("/documents", files=files, headers={"X-API-Key": "s3cret"})
+    assert r.status_code == 200
+    doc_id = r.json()["results"][0]["doc_id"]
+    assert c.delete(f"/documents/{doc_id}").status_code == 401
+    assert c.delete(f"/documents/{doc_id}", headers={"X-API-Key": "s3cret"}).status_code == 200
+    assert c.get("/documents").status_code == 200  # reads stay open

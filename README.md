@@ -98,6 +98,10 @@ one immediately, and the client backs off only when every key has failed in a ro
 Groq enforces limits **per organization**, so keys from the same account share one quota. Measured with
 two such keys: their rate-limit headers counted down together. Rotation then gives failover, not extra capacity.
 
+**Protecting the corpus:** set `ADMIN_API_KEY` to require an `X-API-Key` header for uploading and deleting
+documents (anyone who can upload can plant a poisoned document). Reads and questions stay open; the web UI
+asks for the key when needed. Without it the server logs a warning at startup.
+
 Open **http://localhost:8000** for the UI or **http://localhost:8000/docs** for Swagger.
 The start screen offers example questions for both modes:
 
@@ -120,8 +124,8 @@ The image bakes in the embedding and reranker models, runs as a non-root user, h
 | `POST` | `/ask` | RAG answer. Body: `question`, `top_k`, `hybrid`, `rerank`, `verify` |
 | `POST` | `/agent` | Agentic answer with tool trace. Body: `question`, `verify` |
 | `POST` | `/search` | Retrieval only, no LLM (debug what the model would see) |
-| `POST` | `/documents` | Upload files (multipart `files`), deduplicated by content hash |
-| `GET` / `DELETE` | `/documents`, `/documents/{doc_id}` | List / remove documents |
+| `POST` | `/documents` | Upload files (multipart `files`), deduplicated by content hash. Needs `X-API-Key` if `ADMIN_API_KEY` is set |
+| `GET` / `DELETE` | `/documents`, `/documents/{doc_id}` | List / remove documents (`DELETE` needs `X-API-Key` if set) |
 | `GET` | `/health` | Index size, LLM status |
 
 ```bash
@@ -204,6 +208,6 @@ groundon/
   guard.py     prompt-injection defences
   services.py  wiring · config.py · main.py (FastAPI) · static/index.html (UI)
 eval/          eval_set.json · run_eval.py · verifier_eval.py
-tests/         55 offline tests (fake embedder + scripted LLM)
+tests/         61 offline tests (fake embedder + scripted LLM)
 docs/          design-decisions.md · screenshots
 ```

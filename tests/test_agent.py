@@ -105,3 +105,13 @@ def test_sql_runaway_query_is_stopped(make_services, settings):
     joins = ", ".join(f"employees t{i}" for i in range(8))  # 10^8 rows
     with pytest.raises(ToolError, match="time limit"):
         sql(f"SELECT sum(t0.id + t7.id) FROM {joins}")
+
+
+def test_agent_search_applies_confidence_gate(make_services):
+    llm = ScriptedLLM([
+        tool_call("search_documents", query="quantum chromodynamics lattice gauge"),
+        ChatResult(content="I couldn't find this in the available documents."),
+    ])
+    ans = make_services(llm).agent.run("Explain lattice QCD")
+    assert "No relevant documents" in ans.steps[0].result
+    assert ans.sources == []

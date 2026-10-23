@@ -11,6 +11,7 @@ import time
 from contextlib import closing
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Callable
 
 import httpx
 
@@ -30,10 +31,15 @@ class ToolError(Exception):
 class DocumentSearchTool:
     retriever: Retriever
     top_k: int = 4
+    # The same abstain gate as RAG mode: (confidence, confidence_type) -> good enough to show the model?
+    is_confident: Callable[[float, str], bool] | None = None
     sources: list[Source] = field(default_factory=list)  # accumulated across calls for citations
 
     def __call__(self, query: str) -> str:
         retrieval = self.retriever.retrieve(query, top_k=self.top_k)
+        if retrieval.chunks and self.is_confident and not self.is_confident(retrieval.confidence, retrieval.confidence_type):
+            return (f"No relevant documents found (best {retrieval.confidence_type} score "
+                    f"{retrieval.confidence:.3f} below threshold).")
         new = to_sources(retrieval.chunks, start=len(self.sources) + 1)  # S-labels unique per agent run
         self.sources.extend(new)
         if not new:

@@ -112,7 +112,8 @@ class GroqLLM:
                 log.info("Groq key #%d failed (%s); trying next key", slot + 1, type(e).__name__)
             except groq.APIError as e:  # 400/401/404...: retrying with another key won't help
                 raise LLMError(f"Groq API error: {e}") from e
-            if (attempt + 1) % n == 0:  # every key failed in a row: back off before the next round
+            # Every key failed in a row: back off before the next round (but not after the last one).
+            if (attempt + 1) % n == 0 and attempt + 1 < n * self.max_rounds:
                 self._sleep(_retry_after(last_error, round_number=(attempt + 1) // n))
         else:
             raise LLMError(f"Groq API error: all {n} key(s) failed after {self.max_rounds} rounds: {last_error}")

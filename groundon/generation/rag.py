@@ -111,7 +111,9 @@ class RagPipeline:
             timings["verification"] = round((time.perf_counter() - t2) * 1000)
 
         timings["total"] = round((time.perf_counter() - t0) * 1000)
-        return RagAnswer(answer=text, sources=sources, abstained=citations.is_abstention, abstain_reason=None,
+        # A cited answer that says part is missing is a partial answer, not an abstention.
+        abstained = citations.is_abstention and not citations.has_citations
+        return RagAnswer(answer=text, sources=sources, abstained=abstained, abstain_reason=None,
                          confidence=round(retrieval.confidence, 4), confidence_type=retrieval.confidence_type,
                          citations=citations, verification=verification, llm_called=True,
                          timings_ms=timings, usage=result.usage)

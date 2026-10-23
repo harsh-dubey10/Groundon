@@ -1,12 +1,13 @@
 """FastAPI app: REST endpoints + the single-page UI."""
 
 import logging
+import secrets
 import tempfile
 from contextlib import asynccontextmanager
 from dataclasses import asdict
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, Request, UploadFile
+from fastapi import Depends, FastAPI, File, Header, HTTPException, Request, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
@@ -34,6 +35,13 @@ app = FastAPI(title="Groundon", version="1.0.0", lifespan=lifespan,
 
 def services(request: Request) -> Services:
     return request.app.state.services
+
+
+def require_admin(request: Request, x_api_key: str | None = Header(None)) -> None:
+    """Guard for corpus writes: anyone who can upload can plant a poisoned document."""
+    expected = services(request).settings.admin_api_key
+    if expected and not secrets.compare_digest((x_api_key or "").encode(), expected.encode()):
+        raise HTTPException(401, "missing or wrong X-API-Key")
 
 
 # ---------------- request models ----------------
@@ -78,7 +86,7 @@ def list_documents(request: Request):
     return services(request).store.list_documents()
 
 
-@app.post("/documents")
+@app.post("/documents", dependencies=[Depends(require_admin)])
 async def upload_documents(request: Request, files: list[UploadFile] = File(...)):
     s = services(request)
     results = []
@@ -88,7 +96,7 @@ async def upload_documents(request: Request, files: list[UploadFile] = File(...)
         if ext not in SUPPORTED_EXTENSIONS:
             results.append({"source": name, "status": "rejected", "error": f"unsupported type {ext}"})
             continue
-        data = await upload.read()
+        data = await upload.read(MAX_UPLOAD_BYTES + 1)  # one byte over is enough to detect "too big"
         if len(data) > MAX_UPLOAD_BYTES:
             results.append({"source": name, "status": "rejected", "error": "file larger than 20 MB"})
             continue
@@ -105,7 +113,7 @@ async def upload_documents(request: Request, files: list[UploadFile] = File(...)
     return {"results": results}
 
 
-@app.delete("/documents/{doc_id}")
+@app.delete("/documents/{doc_id}", dependencies=[Depends(require_admin)])
 def delete_document(request: Request, doc_id: str):
     s = services(request)
     if not s.store.delete_document(doc_id):

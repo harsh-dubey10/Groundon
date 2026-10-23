@@ -46,6 +46,9 @@ def chunk_text(text: str, chunk_size: int = 500, chunk_overlap: int = 100) -> li
                     break
                 tail.insert(0, previous)
                 tail_len += len(previous) + 1
+            # Overlap is a bonus: drop it rather than push the next chunk past chunk_size.
+            while tail and tail_len + len(unit) + 1 > chunk_size:
+                tail_len -= len(tail.pop(0)) + 1
             current, length = tail, tail_len
         current.append(unit)
         length += len(unit) + 1

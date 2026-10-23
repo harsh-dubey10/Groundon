@@ -45,6 +45,9 @@ class Settings(BaseSettings):
     min_rerank_score: float = -7.5  # cross-encoder logit; calibrated on eval set: off-topic <= -8.5, answerable >= -6.8
     min_vector_score: float = 0.30  # cosine, used when reranking is off; off-topic <= 0.21, answerable >= 0.40
 
+    # --- Access control: when set, uploading/deleting documents needs header X-API-Key: <value> ---
+    admin_api_key: str = ""
+
     # --- Agent ---
     agent_max_steps: int = 6
     currency_api_url: str = "https://api.frankfurter.dev/v1/latest"

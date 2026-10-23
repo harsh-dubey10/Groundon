@@ -90,3 +90,9 @@ def test_verifier_single_claim_string_is_kept_whole(make_services):
     ans = make_services(llm).rag.answer("per diem Germany", rerank=False, verify=True)
     assert ans.verification.grounded is False
     assert ans.verification.unsupported_claims == ["EUR 90"]
+
+
+def test_partial_answer_is_not_marked_abstained(make_services):
+    llm = ScriptedLLM([ChatResult(content=f"Per diem in Germany is EUR 75 [S1]. For France, {NOT_FOUND}")])
+    ans = make_services(llm).rag.answer("per diem Germany and France", rerank=False)
+    assert not ans.abstained and ans.citations.ok
