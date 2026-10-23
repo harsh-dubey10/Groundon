@@ -179,11 +179,12 @@ the eval set in CI as a regression gate; and keep secrets in a secret manager, n
 - Small demo corpus: retrieval metrics are near the ceiling and only show the method.
 - The regex injection detector is a heuristic. It can be bypassed by paraphrasing or other languages.
 - BM25 is rebuilt in memory on every upload. That's fine for thousands of chunks; use FTS5 or OpenSearch beyond that.
-- There's no per-user document access control yet (see question 21).
+- There's no per-user document access control yet (see question 21). An optional `ADMIN_API_KEY` guards
+  uploads and deletes, but every reader sees every document.
 - Agent arithmetic over policy rules isn't verified. Asked "What's the 3-day per diem for a Germany trip
   in INR?", the agent has ignored the rule that the first and last day pay 75%, and once wrote its own
-  conversion while crediting the tool. A fix: give the agent a calculator tool, and run the verifier on
-  agent answers against the tool results.
+  conversion while crediting the tool. The verifier (`verify=true`) checks agent answers against the full
+  tool results and can flag this; a calculator tool would prevent it.
 - Answer correctness uses keyword matching, which is strict and can miss correct paraphrased answers.
   This actually happened: the model's non-breaking spaces made 4 correct answers score as wrong
   until the scorer normalized Unicode. Lesson: check eval failures by hand before trusting the metric.

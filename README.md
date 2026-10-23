@@ -11,7 +11,8 @@ Python · FastAPI · FAISS · sentence-transformers · BM25 · cross-encoder rer
 
 ## At a glance
 
-Measured on a 38-question eval set (details in [Evaluation](#evaluation)):
+Measured on a 38-question eval set (details in [Evaluation](#evaluation)). The "not found" threshold was
+tuned on this same set, so treat the answer numbers as an upper bound rather than held-out performance:
 
 - **100% answer accuracy, 0% false abstention.** Every answerable question answered correctly, none refused.
 - **100% correct "not found"** on the 5 unanswerable questions. 3 of them are rejected before any LLM call.
